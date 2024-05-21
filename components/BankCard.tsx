@@ -7,7 +7,7 @@ const BankCard = ({
   userName,
   showBalance = true,
 }: CreditCardProps) => {
-  console.log(account);
+  // console.log(account);
   return (
     <div className="flex flex-col">
       <Link href={`/}`} className="bank-card">

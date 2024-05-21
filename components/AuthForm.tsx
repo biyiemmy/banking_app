@@ -12,9 +12,10 @@ import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { login, register } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
-  const router = useRouter;
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,7 +31,7 @@ const AuthForm = ({ type }: { type: string }) => {
   });
 
   // 2. Define a submit handler.
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
@@ -39,32 +40,23 @@ const AuthForm = ({ type }: { type: string }) => {
       //   setIsLoading(false);
 
       if (type === "register") {
-        const userData = {
-          //   firstName: data.firstName!,
-          //   lastName: data.lastName!,
-          //   address1: data.address1!,
-          //   city: data.city!,
-          //   state: data.state!,
-          //   postalCode: data.postalCode!,
-          //   dateOfBirth: data.dateOfBirth!,
-          //   ssn: data.ssn!,
-          //   email: data.email,
-          //   password: data.password,
-        };
-
-        // const newUser = await register(userData);
-        // setUser(newUser);
+        const newUser = await register(data);
+        setUser(newUser);
       }
+
       if (type === "login") {
-        // const response = await login({
-        //   email: data.email,
-        //   password: data.password,
-        // });
-        // if (response) router.push("/");
+        const response = await login({
+          email: data.email,
+          password: data.password,
+        });
+        if (response) {
+          router.push("/");
+        }
       }
     } catch (error) {
       console.log(error);
     } finally {
+      setIsLoading(false);
     }
   };
 
