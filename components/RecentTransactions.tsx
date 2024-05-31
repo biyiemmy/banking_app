@@ -14,6 +14,8 @@ const RecentTransactions = ({
   const rowsPerPage = 10;
   const totalPages = Math.ceil(transactions.length / rowsPerPage);
 
+  console.log(transactions);
+
   const indexOfLastTransaction = page * rowsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
 
@@ -21,6 +23,7 @@ const RecentTransactions = ({
     indexOfFirstTransaction,
     indexOfLastTransaction
   );
+  console.log(currentTransactions);
 
   return (
     <section className="recent-transactions">

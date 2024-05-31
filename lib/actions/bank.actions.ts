@@ -11,7 +11,6 @@ import {
 
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
-
 import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
@@ -45,7 +44,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           type: accountData.type as string,
           subtype: accountData.subtype! as string,
           appwriteItemId: bank.$id,
-          sharableId: bank.sharableId,
+          shareableId: bank.shareableId,
         };
 
         return account;
@@ -68,17 +67,21 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
   try {
     // get bank from db
     const bank = await getBank({ documentId: appwriteItemId });
+    // console.log(bank);
 
     // get account info from plaid
     const accountsResponse = await plaidClient.accountsGet({
       access_token: bank.accessToken,
     });
+    // console.log(accountsResponse);
     const accountData = accountsResponse.data.accounts[0];
+    // console.log(accountData);
 
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId({
       bankId: bank.$id,
     });
+    // console.log(transferTransactionsData);
 
     const transferTransactions = transferTransactionsData.documents.map(
       (transferData: Transaction) => ({
@@ -114,10 +117,14 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       appwriteItemId: bank.$id,
     };
 
+    // console.log(account);
+
     // sort transactions by date such that the most recent transaction is first
     const allTransactions = [...transactions, ...transferTransactions].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+
+    // console.log(allTransactions);
 
     return parseStringify({
       data: account,

@@ -17,6 +17,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   console.log(appwriteItemId);
 
   const account = await getAccount({ appwriteItemId });
+  console.log(account);
 
   console.log({
     accountsData,
