@@ -64,11 +64,14 @@ const AuthForm = ({ type }: { type: string }) => {
           password: data.password,
         });
         if (response) {
+          console.log("Login successful", response);
           router.push("/");
+        } else {
+          console.error("Login failed");
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during form submission:", error);
     } finally {
       setIsLoading(false);
     }
